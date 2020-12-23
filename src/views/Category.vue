@@ -257,7 +257,7 @@ export default {
   },
   methods: {
     dj(e) {
-      console.log(e.target.nodeName);
+      // console.log(e.target.nodeName);
       if (
         e.target.nodeName == "I" ||
         e.target.nodeName == "A" ||
