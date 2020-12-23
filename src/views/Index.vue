@@ -556,7 +556,7 @@
                                   class="button btn-cart"
                                   type="button"
                                   data-original-title="Add to Cart"
-                                  @click="addCart(v.id)"
+                                  @click="addCart(v.id, 1)"
                                 >
                                   <span>添加到购物车</span>
                                 </button>
@@ -855,6 +855,9 @@ export default {
             update_time: this.moment(new Date()).format("YYYY-MM-DD hh:mm:ss"),
           };
           this.axios.post("/cart/add", this.qs.stringify(obj)).then((res) => {
+            if (res.data.code == 200)
+              if (confirm("此商品已添加到购物车，是否前往购物车查看"))
+                this.$router.push("/cart");
             if (res.data.code == 201)
               if (confirm("这个商品您已经填加过了，是否前往购物车查看"))
                 this.$router.push("/cart");

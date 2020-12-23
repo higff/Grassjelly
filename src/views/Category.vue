@@ -183,9 +183,7 @@
                             <li>
                               <router-link class="link-compare" to="/"
                                 ><i class="icon-shuffle icons"></i
-                                ><span class="hidden"
-                                  >比较</span
-                                ></router-link
+                                ><span class="hidden">比较</span></router-link
                               >
                             </li>
                           </ul>
@@ -222,7 +220,7 @@
                               class="button btn-cart"
                               type="button"
                               data-original-title="Add to Cart"
-                              @click="addCart(v.id,1)"
+                              @click="addCart(v.id, 1)"
                             >
                               <span>添加到购物车</span>
                             </button>
@@ -260,7 +258,11 @@ export default {
   methods: {
     dj(e) {
       console.log(e.target.nodeName);
-      if (e.target.nodeName == "I" || e.target.nodeName == "A" || e.target.nodeName == "IMG") {
+      if (
+        e.target.nodeName == "I" ||
+        e.target.nodeName == "A" ||
+        e.target.nodeName == "IMG"
+      ) {
         location.reload();
       }
     },
@@ -280,6 +282,9 @@ export default {
             update_time: this.moment(new Date()).format("YYYY-MM-DD hh:mm:ss"),
           };
           this.axios.post("/cart/add", this.qs.stringify(obj)).then((res) => {
+            if (res.data.code == 200)
+              if (confirm("此商品已添加到购物车，是否前往购物车查看"))
+                this.$router.push("/cart");
             if (res.data.code == 201)
               if (confirm("这个商品您已经填加过了，是否前往购物车查看"))
                 this.$router.push("/cart");
@@ -293,9 +298,9 @@ export default {
     addcart() {
       // 获取地址栏中的参数
       let id = this.$route.query.id;
-      let count = document.getElementById('qty').value;
-      this.addCart(id, parseInt(count));
-    }
+      let count = document.getElementById("qty").value;
+      if (parseInt(count) > 0) this.addCart(id, parseInt(count));
+    },
   },
   beforeMount() {
     if (location.href.indexOf("#reloaded") == -1) {

@@ -590,6 +590,9 @@ export default {
             update_time: this.moment(new Date()).format("YYYY-MM-DD hh:mm:ss"),
           };
           this.axios.post("/cart/add", this.qs.stringify(obj)).then((res) => {
+            if (res.data.code == 200)
+              if (confirm("此商品已添加到购物车，是否前往购物车查看"))
+                this.$router.push("/cart");
             if (res.data.code == 201)
               if (confirm("这个商品您已经填加过了，是否前往购物车查看"))
                 this.$router.push("/cart");
@@ -623,9 +626,8 @@ export default {
     // 发送请求加载商品分类
     this.axios.get("/category").then((res) => {
       this.category = res.data.cates;
-      console.log(this.category);
+      // console.log(this.category);
     });
-    // this.loadData(this.active, this.page, this.pagesize);
     this.loadData(this.active, this.page, this.pagesize);
   },
 };

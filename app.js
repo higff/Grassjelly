@@ -287,21 +287,35 @@ server.delete('/cart/delete', (req, res) => {
         if (error) throw error;
         res.send({
             code: 200,
-            message: '此商品已删除'
+            message: '此商品删除成功'
         });
     });
 });
 
 // 查询指定用户下的所有购物车接口
-server.get('/cart/select', (req, res) => {
+server.get('/cart/selectAll', (req, res) => {
     let id = req.query.userid;
-    let sql = 'SELECT id,pname,img,price,count,is_checked FROM pq_cart WHERE userid=?';
+    let sql = 'SELECT id,proid,pname,img,price,count,is_checked FROM pq_cart WHERE userid=?';
     pool.query(sql, [id], (error, carts) => {
         if (error) throw error;
         res.send({
             code: 200,
             message: '查询成功',
             carts: carts
+        });
+    });
+});
+
+// 查询指定用户下的指定购物车接口
+server.get('/cart/select', (req, res) => {
+    let id = req.query.id;
+    let sql = 'SELECT id,userid,proid,pname,img,price,count,is_checked FROM pq_cart WHERE id=?';
+    pool.query(sql, [id], (error, cart) => {
+        if (error) throw error;
+        res.send({
+            code: 200,
+            message: '查询成功',
+            cart: cart[0]
         });
     });
 });

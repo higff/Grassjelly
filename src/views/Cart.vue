@@ -3,7 +3,7 @@
     <Hander></Hander>
     <section class="page-content-wrapper login-area ptb-100">
       <div class="container">
-        <div @click="del">
+        <div @click="operation">
           <div class="row title">
             <div class="col-md-1 col-sm-1 col-xs-1">选中</div>
             <div class="col-md-2 col-sm-2 col-xs-2">图片</div>
@@ -15,35 +15,44 @@
           </div>
           <div class="row tab" v-for="(v, k) of carts" :key="k">
             <div class="col-md-1 col-sm-1 col-xs-1">
-              <input id="lin" type="checkbox" v-model="v.is_checked" />
+              <input
+                id="lin"
+                type="checkbox"
+                v-model="v.is_checked"
+                :data-id="v.id"
+                :data-checked="v.is_checked"
+              />
             </div>
             <div class="col-md-2 col-sm-2 col-xs-2">
-              <router-link to="/"
+              <router-link :to="`/category?id=${v.proid}`"
                 ><img :src="`images/products/${v.img}`"
               /></router-link>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-2">
-              <router-link to="/" style="font-size: 17px">{{
-                v.pname
-              }}</router-link>
+              <router-link
+                :to="`/category?id=${v.proid}`"
+                style="font-size: 17px"
+                >{{ v.pname }}</router-link
+              >
             </div>
             <div class="col-md-2 col-sm-2 col-xs-2">
               <span class="amount">￥{{ v.price.toFixed(2) }}</span>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-2 product-quantity">
-              <button class="but" @click="change(-1, k)">-</button
-              ><input id="link" type="text" :value="`${v.count}`" /><button
-                class="but"
-                @click="change(+1, k)"
-              >
-                +
-              </button>
+              <button class="but" @click="reduce(k, v.id)">-</button>
+              <input
+                class="link"
+                type="text"
+                :value="`${v.count}`"
+                @blur="input(k, v.id)"
+              />
+              <button class="but" @click="add(k, v.id)">+</button>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-2">
               <span>￥{{ v.price * v.count }}</span>
             </div>
             <div class="col-md-1 col-sm-1 col-xs-1">
-              <span style="font-size: 20px; cursor: pointer" :data-k="k"
+              <span style="font-size: 20px; cursor: pointer" :data-k="v.id"
                 >x</span
               >
             </div>
@@ -89,36 +98,79 @@ export default {
   },
   data() {
     return {
-      box: 1,
-      carts: [
-        {
-          pid: 1,
-          pname: "标题",
-          price: 4599,
-          count: 1,
-          img: "01.jpg",
-          is_checked: 1,
-        },
-      ],
+      carts: [],
     };
   },
   methods: {
-    check() {
-      for (let che of this.carts) {
-        che.is_checked = this.box;
+    add(k, id) {
+      if (this.carts[k].count >= 0) {
+        this.carts[k].count += 1;
+        let obj = {
+          id: id,
+          count: this.carts[k].count,
+          update_time: this.moment(new Date()).format("YYYY-MM-DD hh:mm:ss"),
+        };
+        this.update(obj);
       }
     },
-    change(n, k) {
+    reduce(k, id) {
       if (this.carts[k].count > 0) {
-        this.carts[k].count += n;
-      } else {
-        this.carts.splice(k, 1);
+        this.carts[k].count += -1;
+        let obj = {
+          id: id,
+          count: this.carts[k].count,
+          update_time: this.moment(new Date()).format("YYYY-MM-DD hh:mm:ss"),
+        };
+        this.update(obj);
+      } else this.del(id);
+    },
+    input(k, id) {
+      let count = parseInt(document.getElementsByClassName("link")[k].value);
+      if (count >= 0) {
+        let obj = {
+          id: id,
+          count: count,
+          update_time: this.moment(new Date()).format("YYYY-MM-DD hh:mm:ss"),
+        };
+        this.update(obj);
       }
     },
-    del(e) {
+    // 删除事件
+    del(k) {
+      this.axios.get("/cart/select", { params: { id: k } }).then((res) => {
+        if (confirm(`是否删除${res.data.cart.pname}`))
+          this.axios
+            .delete("/cart/delete", { params: { id: k } })
+            .then((res) => {
+              // console.log(res.data.message);
+              // 删除后，执行一次刷新
+              location.reload();
+            });
+      });
+    },
+    // 修改事件
+    update(obj) {
+      this.axios.put("/cart/update", this.qs.stringify(obj)).then((res) => {
+        // console.log(res.data.message);
+        // 更新后，执行一次刷新
+        location.reload();
+      });
+    },
+    // 操作事件
+    operation(e) {
+      // 删除事件
       if (e.target.nodeName == "SPAN" && e.target.innerHTML == "x") {
         let k = e.target.dataset.k;
-        this.carts.splice(k, 1);
+        this.del(k);
+      }
+      // 修改事件1:是否选中
+      if (e.target.nodeName == "INPUT" && e.target.id == "lin") {
+        let obj = {
+          id: e.target.dataset.id,
+          is_checked: e.target.dataset.checked ? 1 : 0,
+          update_time: this.moment(new Date()).format("YYYY-MM-DD hh:mm:ss"),
+        };
+        this.update(obj);
       }
     },
   },
@@ -129,7 +181,11 @@ export default {
     }
   },
   mounted() {
-
+    this.axios
+      .get("/cart/selectAll", { params: { userid: this.$store.state.info.id } })
+      .then((res) => {
+        this.carts.push(...res.data.carts);
+      });
   },
   computed: {
     total() {
@@ -233,7 +289,7 @@ export default {
     margin: 0 10px;
     text-align: center;
   }
-    .cart .cart_totals {
+  .cart .cart_totals {
     margin-top: 30px;
   }
 }
