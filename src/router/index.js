@@ -5,11 +5,12 @@ import Product from '../views/Product'
 import Show from '../views/Show'
 import Cart from '../views/Cart'
 import Category from '../views/Category'
+import Join from '../views/Join'
+import Message from '../views/Message'
 
 Vue.use(VueRouter)
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'Index',
     component: Index
@@ -29,6 +30,8 @@ const routes = [
   },
   {
     path: '/message',
+    name: '/Message',
+    component: Message
   },
   {
     path: '/about',
@@ -37,6 +40,8 @@ const routes = [
   },
   {
     path: '/join',
+    name: 'join',
+    component: Join
   },
   {
     path: '/contact',
