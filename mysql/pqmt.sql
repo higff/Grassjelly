@@ -28,13 +28,19 @@ CREATE TABLE `pq_cart` (
   `img` varchar(200) NOT NULL COMMENT '商品主图,url相对地址,非空',
   `price` decimal(20,2) NOT NULL COMMENT '商品价格,保留两位小数,非空',
   `count` int(11) DEFAULT NULL COMMENT '商品数量',
-  `is_checked` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否选择:1-已勾选 0-未勾选',
+  `is_checked` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否选择:1-已勾选 0-未勾选',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `pq_cart` */
+
+insert  into `pq_cart`(`id`,`userid`,`proid`,`pname`,`img`,`price`,`count`,`is_checked`,`create_time`,`update_time`) values 
+(2,1,1,'超级水果茶','01.jpg',15.00,3,1,'2020-12-23 07:09:24','2020-12-23 11:07:47'),
+(3,1,11,'书亦烧仙草','11.jpg',16.00,2,1,'2020-12-23 07:09:30','2020-12-23 11:08:00'),
+(4,1,21,'葡萄柚益菌多','21.jpg',14.00,2,1,'2020-12-23 07:11:50','2020-12-23 11:07:56'),
+(6,1,13,'小芋圆烧仙草','13.jpg',16.00,1,1,'2020-12-23 11:08:16','2020-12-23 11:08:16');
 
 /*Table structure for table `pq_category` */
 
