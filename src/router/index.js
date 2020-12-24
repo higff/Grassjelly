@@ -8,6 +8,8 @@ import Category from '../views/Category'
 import Join from '../views/Join'
 import Message from '../views/Message'
 import About from '../views/About'
+import Contact from '../views/Contact'
+import Information from '../views/Information'
 
 Vue.use(VueRouter)
 
@@ -28,6 +30,8 @@ const routes = [{
   },
   {
     path: '/information',
+    name: 'information',
+    component: Information
   },
   {
     path: '/message',
@@ -46,6 +50,8 @@ const routes = [{
   },
   {
     path: '/contact',
+    name: 'contact',
+    component: Contact
   },
   {
     path: '/category',

@@ -295,12 +295,12 @@
                             v-for="(t, i) of information"
                             :key="i"
                           >
-                            <router-link to="/information"
+                            <router-link :to="`/information?id=${i}`"
                               ><span>{{ t.nav_item_name }}</span></router-link
                             >
                             <ul class="level1">
                               <li v-for="(msg, i) of t.msgs" :key="i">
-                                <router-link to="/information"
+                                <router-link :to="`/information`"
                                   ><span
                                     ><i>>></i> {{ msg.title }}</span
                                   ></router-link
@@ -403,8 +403,8 @@ export default {
           nav_name: "新闻资讯",
           link: "/information",
           items: [
-            { nav_item_name: "公司动态", link: "/" },
-            { nav_item_name: "行业资讯", link: "/" },
+            { nav_item_name: "新闻咨询", link: "/information" },
+            { nav_item_name: "行业动态", link: "/information" },
           ],
         },
         { nav_name: "在线留言", link: "/message" },
@@ -545,9 +545,9 @@ export default {
         if (n.navid == 7) this.about.push(n);
       });
       // 获取资讯文章
-      // 1.公司动态
+      // 1.新闻咨询
       this.getInfo(13, 1, 5);
-      // 2.行业资讯
+      // 2.行业动态
       this.getInfo(14, 1, 5);
     });
 
