@@ -329,7 +329,7 @@
                   >
                   <ul>
                     <li v-for="(a, i) of about" :key="i">
-                      <router-link to="/">{{ a.nav_item_name }}</router-link>
+                      <router-link :to="`/about?id=${i}`"><span>{{ a.nav_item_name }}</span></router-link>
                     </li>
                   </ul>
                 </li>

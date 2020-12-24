@@ -7,6 +7,7 @@ import Cart from '../views/Cart'
 import Category from '../views/Category'
 import Join from '../views/Join'
 import Message from '../views/Message'
+import About from '../views/About'
 
 Vue.use(VueRouter)
 
@@ -36,7 +37,7 @@ const routes = [{
   {
     path: '/about',
     name: 'About',
-    // component: () => import('../views/About')
+    component: About
   },
   {
     path: '/join',

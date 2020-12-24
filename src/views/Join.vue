@@ -62,6 +62,12 @@ export default {
       }
     },
   },
+  beforeMount() {
+    if (location.href.indexOf("#reloaded") == -1) {
+      location.href = location.href + "#reloaded";
+      location.reload();
+    }
+  },
   mounted() {
     document
       .getElementsByClassName("list-unstyled data-ul row")[0]
