@@ -64,7 +64,7 @@
               <div class="container">
                 <div class="row">
                   <div class="col-xs-12 col-sm-6">
-                    <div class="welcome-msg">欢迎来到 佩奇书亦烧仙草 !</div>
+                    <div class="welcome-msg">欢迎来到 Peppa书亦烧仙草 !</div>
                   </div>
                   <div class="col-xs-6 hidden-xs">
                     <!-- Header Top Links -->
@@ -329,7 +329,9 @@
                   >
                   <ul>
                     <li v-for="(a, i) of about" :key="i">
-                      <router-link :to="`/about?id=${i}`"><span>{{ a.nav_item_name }}</span></router-link>
+                      <router-link :to="`/about?id=${i}`"
+                        ><span>{{ a.nav_item_name }}</span></router-link
+                      >
                     </li>
                   </ul>
                 </li>
